@@ -281,9 +281,6 @@ def main():
             optimizer.zero_grad()
             cost.backward()
             optimizer.step()
-            # nn.utils.clip_grad_norm_(policy.parameters(), 0.5)
-            # print('actor',policy.feature_actor.feature_extractor.conv1.weight.grad) 
-            # print('critic',policy.feature_critic.feature_extractor.conv1.weight.grad) 
 
         mean_reward = round(sum(Reward)/len(Reward),4)
         writer.add_scalar('Reward:', mean_reward, epoch)

@@ -1,3 +1,8 @@
+"""Adapted from the PyTorch YOLOv3 implementation by Ayoosh Kathuria
+(https://github.com/ayooshkathuria/pytorch-yolo-v3), used here as the object
+detector the active-perception agent acts upon. Not part of this paper's
+contribution.
+"""
 from __future__ import division
 
 import torch 
@@ -62,5 +67,3 @@ def inp_to_image(inp):
 
     inp = inp[:,:,::-1]
     return inp
-
-

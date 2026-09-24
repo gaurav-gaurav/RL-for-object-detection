@@ -1,3 +1,8 @@
+"""Adapted from the PyTorch YOLOv3 implementation by Ayoosh Kathuria
+(https://github.com/ayooshkathuria/pytorch-yolo-v3), used here as the object
+detector the active-perception agent acts upon. Not part of this paper's
+contribution.
+"""
 
 from __future__ import division
 
@@ -90,13 +95,9 @@ def write_results(prediction, confidence, num_classes, nms = True, nms_conf = 0.
     prediction[:,:,:4] = box_a[:,:,:4]
     
     batch_size = prediction.size(0)
-    # output = prediction.new(1, prediction.size(2) + 1)
     output = torch.zeros((1,8), dtype=torch.float)
 
 
-    # print("********************************************************************\n")
-    # print(output.size(), output, prediction)
-    # print("********************************************************************\n")
     write = False
 
     for ind in range(batch_size):
@@ -106,28 +107,15 @@ def write_results(prediction, confidence, num_classes, nms = True, nms_conf = 0.
         max_conf = max_conf.float().unsqueeze(1)
         max_conf_idx = max_conf_idx.float().unsqueeze(1)
 
-        # print("********************************************************************\n")
-        # print(max_conf.size(), max_conf_idx.size())
-        # print("********************************************************************\n")
 
         seq = (image_pred[:,:5], max_conf, max_conf_idx)
         image_pred = torch.cat(seq, 1)
 
-        # print("********************************************************************\n")
-        # print(image_pred.size())
-        # print("********************************************************************\n")
 
         non_zero_ind =  (torch.nonzero(image_pred[:,4]))
         image_pred_ = image_pred[non_zero_ind.squeeze(),:].view(-1,7)
         img_classes = unique(image_pred_[:,-1])
 
-        # print("********************************************************************\n")
-        # print(image_pred_.size())
-        # print(img_classes.size())
-
-        # print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-
-        # print("n_classes", img_classes.size(0))
 
         #WE will do NMS classwise
         for cls in img_classes:
@@ -141,7 +129,6 @@ def write_results(prediction, confidence, num_classes, nms = True, nms_conf = 0.
             image_pred_class = image_pred_class[conf_sort_index]
 
             idx = image_pred_class.size(0)
-            #if nms has to be done
             if nms:
                 #For each detection
                 for i in range(idx):
@@ -172,9 +159,6 @@ def write_results(prediction, confidence, num_classes, nms = True, nms_conf = 0.
             
             batch_ind = image_pred_class.new(image_pred_class.size(0), 1).fill_(ind)
             seq = batch_ind, image_pred_class
-            # print("-------------------------------\n")
-            # print(batch_ind.size(), image_pred_class.size())
-            # print("*****************************************\n")
 
             if not write:
                 output = torch.cat(seq,1)
@@ -182,8 +166,5 @@ def write_results(prediction, confidence, num_classes, nms = True, nms_conf = 0.
             else:
                 out = torch.cat(seq,1)
                 output = torch.cat((output,out))
-    # print("$$$$$$$$$$$$$$$$$$$$$$$$$$$\n")
-    # print(output)
-    # print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
 
     return output

@@ -17,7 +17,6 @@ def get_detection(image):
 	weightsPath = 'Weights/yolov3.weights'
 	configPath = 'cfg/yolov3.cfg'
 
-	# print("[INFO] loading YOLO from disk...")
 	net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
 	
 	(H, W) = image.shape[:2]
@@ -32,7 +31,6 @@ def get_detection(image):
 	layerOutputs = net.forward(ln)
 	end = time.time()
 
-	# print("[INFO] YOLO took {:.6f} seconds".format(end - start))
 
 	boxes = []
 	confidences = []
@@ -70,7 +68,6 @@ def get_detection(image):
 
 	idxs = cv2.dnn.NMSBoxes(boxes, confidences, 0.5,
 		0.3)
-	# print(idxs)
 # ensure at least one detection exists
 	if len(idxs) > 0:
 	# loop over the indexes we are keeping
@@ -88,6 +85,4 @@ def get_detection(image):
 				0.5, color, 2)
 
 # show the output image
-	# cv2.imshow("Image", image)
-	# cv2.waitKey(0)
 	return idxs

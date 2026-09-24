@@ -1,3 +1,8 @@
+"""Adapted from the PyTorch YOLOv3 implementation by Ayoosh Kathuria
+(https://github.com/ayooshkathuria/pytorch-yolo-v3), used here as the object
+detector the active-perception agent acts upon. Not part of this paper's
+contribution.
+"""
 from __future__ import division
 
 import torch 
@@ -28,7 +33,6 @@ def confidence_filter_cls(result, confidence):
     return result
 
 
-
 def get_abs_coord(box):
     box[2], box[3] = abs(box[2]), abs(box[3])
     x1 = (box[0] - box[2]/2) - 1 
@@ -37,7 +41,6 @@ def get_abs_coord(box):
     y2 = (box[1] + box[3]/2) - 1
     return x1, y1, x2, y2
     
-
 
 def sanity_fix(box):
     if (box[0] > box[2]):
@@ -96,8 +99,6 @@ def pred_corner_coord(prediction):
     prediction[ind_nz[0], ind_nz[1]] = box
     
     return prediction
-
-
 
 
 def write(x, batches, results, colors, classes):

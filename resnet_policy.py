@@ -4,7 +4,6 @@ import torch.nn.functional as F
 from torchsummary import summary
 
 
-# __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            # 'resnet152']
 
 

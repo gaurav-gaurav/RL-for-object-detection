@@ -23,7 +23,7 @@ from torchvision import models
 from torch.utils.tensorboard import SummaryWriter
 
 from utils import *
-from Policy import policy_network
+from policy import policy_network
 from PPO import memory_buffer, ppo
 from resnet_policy import resnet18
 
@@ -121,7 +121,6 @@ if args.eval:
     PATH = args.eval_dir
     checkpoint = torch.load(PATH, map_location = 'cpu')
     policy.load_state_dict(checkpoint['model_state_dict'], strict=False)
-    # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     policy.eval()
 
 else:
@@ -154,7 +153,6 @@ def main():
             orig_img, *_ = letterbox_image(img, args.image_dim)          ## image array for learning
             orig_img_array = np.array(orig_img)
             gt_img_array = copy.deepcopy(orig_img_array)
-            # original_detect = detector.detector(orig_img_array)        ##[batch_idx, Xmin, Ymin, Xmax, Ymax, object_score, class_score, class_index] 
 
             if args.action_type=='discrete':
                 noisey_img_, noise_factor = synthetic_change_dis(args, img, flag = 1)
@@ -200,7 +198,6 @@ def main():
                 arr = np.array(arr)
                 pred_refine_arr.append(arr)
             pred_refine_arr = np.array(pred_refine_arr)
-            # print(pred_refine_arr)
 #############################
             pred_noise = np.array(noisey_detect.cpu())
             pred_noise_arr = []
@@ -211,7 +208,6 @@ def main():
                 arr = np.array(arr)
                 pred_noise_arr.append(arr)
             pred_noise_arr = np.array(pred_noise_arr)
-            # print(pred_refine_arr)
 ####################____Plot_Results____####################
 
             if args.show_result:
@@ -227,8 +223,6 @@ def main():
 
             TP_refined, *_ = get_F1(resized_gnd_truth_arr, pred_refine_arr, args.iou_threshold)
             TP_noise, *_ = get_F1(resized_gnd_truth_arr, pred_noise_arr, args.iou_threshold)
-            # print('noise_action', noise_factor)
-            # print('correction_action', action)
             if TP_refined > TP_noise:
                 TP_improvement_count += 1
                 print('TP_improvement_count:',TP_improvement_count)
@@ -236,19 +230,6 @@ def main():
                 TP_degrade_count +=1
                 print('TP_degrade_count:',TP_degrade_count)
                 
-            # print(TP_refined, TP_noise)
-            # recall = TP/(TP+FN+eps)
-            # precision = TP/(TP+FP+eps)
 
-            # F1 = 2*recall*precision/(precision+recall+eps)
-            # if len(iou)>0:
-            #     iou_reward = np.mean(iou)
-            # else:
-            #     iou_reward = 0
-
-            # reward = args.alpha*(iou_reward) + (1-args.alpha)*F1
-            # reward_arr.append(reward)  
-
-        
 if __name__ == '__main__':
     main()

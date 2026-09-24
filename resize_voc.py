@@ -69,4 +69,3 @@ with open('resized_labels.csv', 'w') as f:
 			t = getResizedBB(arr,w,h,img_array.shape[1], img_array.shape[0], 128)
 			resized_gnd_truth_arr[i][1:5]= np.array(t)
 		writer.writerows(resized_gnd_truth_arr)
-

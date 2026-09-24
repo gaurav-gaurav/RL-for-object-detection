@@ -1,3 +1,8 @@
+"""Adapted from the PyTorch YOLOv3 implementation by Ayoosh Kathuria
+(https://github.com/ayooshkathuria/pytorch-yolo-v3), used here as the object
+detector the active-perception agent acts upon. Not part of this paper's
+contribution.
+"""
 from __future__ import division
 
 import torch 
@@ -40,7 +45,6 @@ def parse_cfg(cfgfile):
     blocks.append(block)
 
     return blocks
-#    print('\n\n'.join([repr(x) for x in blocks]))
 
 import pickle as pkl
 
@@ -145,13 +149,11 @@ def create_modules(blocks):
                 module.add_module("leaky_{0}".format(index), activn)
             
             
-            
         #If it's an upsampling layer
         #We use Bilinear2dUpsampling
         
         elif (x["type"] == "upsample"):
             stride = int(x["stride"])
-#            upsample = Upsample(stride)
             upsample = nn.Upsample(scale_factor = 2, mode = "nearest")
             module.add_module("upsample_{}".format(index), upsample)
         
@@ -169,7 +171,6 @@ def create_modules(blocks):
                 end = 0
                 
             
-            
             #Positive anotation
             if start > 0: 
                 start = start - index
@@ -182,14 +183,12 @@ def create_modules(blocks):
             module.add_module("route_{0}".format(index), route)
             
             
-            
             if end < 0:
                 filters = output_filters[index + start] + output_filters[index + end]
             else:
                 filters= output_filters[index + start]
                         
             
-        
         #shortcut corresponds to skip connection
         elif x["type"] == "shortcut":
             from_ = int(x["from"])
@@ -222,7 +221,6 @@ def create_modules(blocks):
             module.add_module("Detection_{}".format(index), detection)
         
             
-            
         else:
             print("Something I dunno")
             assert False
@@ -237,7 +235,6 @@ def create_modules(blocks):
     return (net_info, module_list)
 
 
-
 class Darknet(nn.Module):
     def __init__(self, cfgfile):
         super(Darknet, self).__init__()
@@ -246,7 +243,6 @@ class Darknet(nn.Module):
         self.header = torch.IntTensor([0,0,0,0])
         self.seen = 0
 
-        
         
     def get_blocks(self):
         return self.blocks
@@ -298,7 +294,6 @@ class Darknet(nn.Module):
                 outputs[i] = x
                 
             
-            
             elif module_type == 'yolo':        
                 
                 anchors = self.module_list[i][0].anchors
@@ -325,7 +320,6 @@ class Darknet(nn.Module):
                 
                 outputs[i] = outputs[i-1]
                 
-        
         
         try:
             return detections

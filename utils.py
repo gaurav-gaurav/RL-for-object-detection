@@ -217,21 +217,17 @@ def getResizedBB(arr,w,h,width,height,reso):
     return [xmin,ymin,xmax,ymax]
     
 def get_F1(truth,pred,iou_threshold):
-    # print('#*10',pred,truth)
     TP = 0
     FP = 0
     FN = 0
     dft = pd.DataFrame(truth)
     iou_arr = []
     names = dft[4].unique() #has all the unique class(labels) names
-    # print('\n###############name',names, len(names))
     for i in range(len(names)):
         label_df = dft[dft[4]==names[i]]
         for bbox_orig in np.array(label_df):
-            # print('\n###############bbox_orig', bbox_orig)
             iou_temp = []
             for bbox_pred in pred:
-                # print('\n###########bbox_pred', bbox_pred)
                 if len(pred)>0:
                     iou_temp.append(get_iou(bbox_orig[0:4],bbox_pred[0:4].astype(float)))
             if len(pred)>0: # this is because of error when length of pred becomes zero
@@ -249,7 +245,6 @@ def get_F1(truth,pred,iou_threshold):
                     FN+=1
             else:
                 FP+=1
-    # print(TP, FP, FN,iou_arr)
     return TP,FP,FN,iou_arr
 
 def plot_image(image_array, DO, classes, colors, image_name):
@@ -308,7 +303,6 @@ def get_score(args, resized_gnd_truth_arr, pred_arr, iou_threshold, eps):
         iou_reward = 0
 
     reward = args.alpha*(iou_reward) + (1-args.alpha)*F1
-    # print(reward)
     return reward
 
 def get_image_batch(args, img_path, noise_scale):

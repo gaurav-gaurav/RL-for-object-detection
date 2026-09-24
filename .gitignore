@@ -1,0 +1,28 @@
+# Weights (fetch YOLOv3 weights separately, see README)
+*.weights
+*.pt
+*.pth
+*.ckpt
+
+# Outputs
+runs/
+logs/
+outputs/
+results/
+det/
+*.mp4
+*.png
+*.jpg
+!assets/*.png
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

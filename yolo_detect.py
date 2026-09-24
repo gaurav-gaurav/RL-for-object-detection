@@ -62,35 +62,9 @@ class Detector():
         print(OutPut)
         return OutPut
 
-#     def detector(self, image):
-#         CUDA = torch.cuda.is_available()
-#         bbox_attrs = 5 + self.num_classes
-#         model = Darknet(self.cfg_file)
-#         model.load_weights(self.weight_file)
-#         model.net_info["height"] = self.reso
-#         inp_dim = int(model.net_info["height"])
-#         assert inp_dim % 32 ==0
-#         assert inp_dim >32
-#         model.to(self.args.device)
-#         model.eval()
-#         img =  prep_image(image, self.args)
-        
-#         img = img.to(self.args.device)
-
-#         output = model(img)
-
-#         output = write_results(output, self.confidence, self.num_classes, nms = True, nms_conf = self.nms_thresh)
-#         if type(output) == int:
-#             output = torch.tensor(np.zeros((1,8)))
         
 #         output[:,1:5] = torch.clamp(output[:,1:5], 0.0, float(inp_dim))/float(inp_dim)
      
 # #            im_dim = im_dim.repeat(output.size(0), 1)
 #         output[:,[1,3]] *= image.shape[1]
 #         output[:,[2,4]] *= image.shape[0]
-
-    
-#         classes = load_classes('data/voc.names')
-#         colors = pkl.load(open("pallete", "rb"))
-
-#         return output

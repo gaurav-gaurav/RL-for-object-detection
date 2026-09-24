@@ -250,26 +250,15 @@ def main():
                 noisey_pred_arryay = pred_array(noisey_detect, classes, voc_classes)
                 refined_pred_array = pred_array(refined_detect, classes, voc_classes)
 
-                # print('########################################################\n')
-                # print('ground:', ground_truth_arr,'\n', 'Orig:', original_pred_array,'\n', 'noisey', noisey_pred_arryay,'\n', 'refined', refined_pred_array)
-                # print('########################################################\n')
 
                 score_orig = round(get_score(args, ground_truth_arr, original_pred_array, args.iou_threshold, eps),5)
                 score_noise = round(get_score(args, ground_truth_arr, noisey_pred_arryay, args.iou_threshold, eps),5)
                 score_refine = round(get_score(args, ground_truth_arr, refined_pred_array, args.iou_threshold, eps),5)
-                # print('########################################################\n')
-                # print(score_orig, score_noise, score_refine)
-                # print('########################################################\n')
                 BETA = 2*score_refine - score_orig - score_noise
                 if BETA >= -0.01:
                     reward  = 1
                 else:
                     reward = -1
-                # print('########################################################\n')
-                # print(key)
-                # print(score_orig, score_noise, score_refine,'\n')
-                # print(BETA, reward)
-                # print('########################################################\n')
                 Reward.append(reward)
             
         
@@ -303,9 +292,6 @@ def main():
             optimizer.zero_grad()
             cost.backward()
             optimizer.step()
-            # nn.utils.clip_grad_norm_(policy.parameters(), 0.5)
-            # print('actor',policy.feature_actor.feature_extractor.conv1.weight.grad) 
-            # print('critic',policy.feature_critic.feature_extractor.conv1.weight.grad) 
 
         mean_reward = round(sum(Reward)/len(Reward),4)
         writer.add_scalar('Reward:', mean_reward, epoch)
